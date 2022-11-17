@@ -6,6 +6,7 @@ const app = express()
 const config = require('./utils/config')
 const auth = require('./routes/authRouter')
 const users = require('./routes/userRouter')
+const waitlist = require('./routes/waitlistRouter')
 const notFound = require('./middlewares/not-found')
 
 
@@ -34,6 +35,7 @@ app.get('/', (req, res) => {
 //routes
 app.use('/api/auth',auth)
 app.use('/api/users',users)
+app.use('./api/comingsoon', waitlist)
 
 
 app.use((err, req, res, next)=>{
