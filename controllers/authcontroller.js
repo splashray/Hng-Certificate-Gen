@@ -12,7 +12,7 @@ const userSignup  = async (req, res, next)=>{
             throw error;
         }
 
-
+        const name = req.body.name;
         const email = req.body.email;
         const subscribed = (req.body.subscribed) ? req.body.subscribed : false;
         const isAdmin = (req.body.isAdmin) ? req.body.isAdmin : false;
@@ -30,6 +30,7 @@ const userSignup  = async (req, res, next)=>{
                 throw error;
             }
             const newUser = new User({
+                name: name,
                 email: email,
                 password: hash,
                 isAdmin: isAdmin,
