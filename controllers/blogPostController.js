@@ -1,5 +1,45 @@
 const blogPostModel = require('../models/blogPostModel')
 
+exports.addBlogPost = async (req, res) => {
+    try {
+        const { title, article, writtenBy, datePosted } = req.body;
+        const blogPost = await blogPostModel.addBlogPost(title, article, writtenBy, datePosted);
+        return res.status(200).json({
+            success: true,
+            blogPost
+        })
+    } catch (error) {
+        return res.status(500).json({
+            success: false,
+            error: error
+        })
+    }
+}
+
+exports.getAllBlogPosts = async (req, res) => {
+    try {
+        const blogPosts = await blogPostModel.getAllBlogPosts();
+        return res.status(200).json(
+            blogPosts
+        )
+    } catch (error) {
+        return res.status(500).json({ success: false, error: error })
+    }
+}
+
+exports.getOneBlogPost = async (req, res) => {
+    try {
+        const blogPost = await blogPostModel.getOneBlogPost(req.params.id);
+        return res.status(200).json(
+            blogPost
+        )
+    } catch (error) {
+        return res.status(500).json({
+            success: false,
+            error: error.message
+        })
+    }
+}
 
 exports.deleteBlogPostById = async (req, res) => {
     try {
@@ -8,12 +48,12 @@ exports.deleteBlogPostById = async (req, res) => {
             success: true
         })
     } catch (error) {
-        console.log(error.message)
         return res.status(500).json({
             error: error.message
         })
     }
 }
+
 exports.updateBlogPost = async (req, res) => {
     try {
         const { title, description } = req.body;
