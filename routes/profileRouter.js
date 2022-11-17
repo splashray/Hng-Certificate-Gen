@@ -25,7 +25,7 @@ router.get("/:id", async (req, res) => {
     email: req.body.email,
     phoneNumber: req.body.phonenNmber,
     });
-   profile = await profile.save();
+   await profile.save();
    if(!profile)
     return res.status(404).send('profile cannot be created')
     
