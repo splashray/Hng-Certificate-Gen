@@ -36,8 +36,8 @@ const userSignup  = async (req, res, next)=>{
                 isAdmin: isAdmin,
                 subscribed: subscribed
             })
-            await newUser.save()
-             res.status(200).json({message: "New User has been created."})
+            const createdUser = await newUser.save()
+             res.status(200).json({message: "New User has been created.", id: createdUser._id, email: createdUser.email})
         });
     } catch (err) {
         next(err)

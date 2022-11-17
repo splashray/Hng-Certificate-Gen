@@ -7,6 +7,6 @@ const { userSignup } = require('../controllers/authController')
 // router.post("/signin", )
 
 //user sign up
-router.post("/signup", [body("email").trim().isEmail().withMessage("Please enter a valid email!").normalizeEmail(), body("password").trim().not().isEmpty()], userSignup)
+router.post("/signup", [body("email").trim().isEmail().withMessage("Please enter a valid email!").normalizeEmail(), body("password").trim().not().isEmpty(), body("name").trim().not().isEmpty()], userSignup)
 
 module.exports = router
