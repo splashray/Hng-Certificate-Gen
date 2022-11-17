@@ -19,7 +19,7 @@ const memberSchema = new Schema({
     type: String,
     default: '',
   },
-  team: {
+  stack: {
     required: true,
     type: String,
     enum: ['backend', 'frontend', 'marketing', 'design', 'product manager'],

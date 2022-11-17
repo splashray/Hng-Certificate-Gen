@@ -1,6 +1,7 @@
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable consistent-return */
 /* eslint-disable linebreak-style */
+const { validationResult } = require('express-validator');
 const Member = require('../models/Member');
 
 // get list of all team members with optional stack query
@@ -54,6 +55,10 @@ exports.getTeamMember = async (req, res, next) => {
 
 exports.addTeamMember = async (req, res, next) => {
   try {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
     const {
       body,
     } = req;
