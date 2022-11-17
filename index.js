@@ -22,6 +22,8 @@ mongoose.connect(config.MONGODB_URL, {
   console.log(error.reason);
 })
 
+// const passport = require("passport");
+// require("./passportConfig")(passport);
 
 //middleware
 app.use(cors());
