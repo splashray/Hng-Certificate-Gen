@@ -36,9 +36,8 @@ app.get('/', (req, res) => {
 
 //routes
 app.use('/api/auth',auth)
-app.use('/api/users',users)
+app.use('/api/users', users)
 app.use('/api/profile',profile)
-
 
 
 app.use((err, req, res, next)=>{
@@ -55,9 +54,6 @@ app.use((err, req, res, next)=>{
 app.use(notFound)
 
 
-// app.listen(config.PORT , ()=>{
-//     console.log(`connected to backend - ${config.PORT}`);
-// });
 
 mongoose.connect(config.MONGODB_URL).then(result => {
   app.listen(config.PORT , ()=>{
