@@ -6,6 +6,7 @@ const app = express()
 const config = require('./utils/config')
 const auth = require('./routes/authRouter')
 const users = require('./routes/userRouter')
+const profile = require('./routes/profileRouter')
 const notFound = require('./middlewares/not-found')
 
 
@@ -34,6 +35,8 @@ app.get('/', (req, res) => {
 //routes
 app.use('/api/auth',auth)
 app.use('/api/users',users)
+app.use('/api/profile',profile)
+
 
 
 app.use((err, req, res, next)=>{
