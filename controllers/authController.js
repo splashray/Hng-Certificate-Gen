@@ -1,5 +1,5 @@
 const User = require('../models/userModel')
-const brycpt =require('bcryptjs')
+const bcrypt =require('bcryptjs')
 
 const userSignup  = async (req, res, next)=>{
     try {
