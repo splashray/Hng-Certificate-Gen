@@ -9,7 +9,10 @@ const users = require('./routes/userRouter')
 const careers = require('./routes/careerRouter')
 const mailingLists = require('./routes/mailingListRouter')
 const profile = require('./routes/profileRouter')
+const csvUpload = require('./routes/csvUploadRouter')
 const notFound = require('./middlewares/not-found')
+const filesPayloadExists = require('./middlewares/filePayLoadExist')
+const fileExtLimiter = require('./middlewares/fileExtLimiter')
 
 
 mongoose.set('useCreateIndex', true)
@@ -41,6 +44,7 @@ app.use('/api/mailinglists',mailingLists)
 
 app.use('/api/profile',profile)
 
+app.use('/api/upload/csv', fileExtLimiter, filesPayloadExists, csvUpload)
 
 
 app.use((err, req, res, next)=>{
