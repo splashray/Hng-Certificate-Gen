@@ -1,6 +1,5 @@
 const express = require('express')
 const mongoose = require('mongoose')
-const bodyParser = require('body-Parser')
 const cors = require('cors')
 const app = express()
 const config = require('./utils/config')
@@ -27,7 +26,7 @@ mongoose.connect(config.MONGODB_URL, {
 //middleware
 app.use(cors());
 app.use(express.json())
-app.use(bodyParser.json())
+app.use(express.urlencoded({ extended: false }));
 
 app.get('/', (req, res) => {
   res.send('Welcome to HNG-Certificate Api')
