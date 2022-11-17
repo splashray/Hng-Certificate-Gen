@@ -3,15 +3,31 @@
 /* eslint-disable linebreak-style */
 const Member = require('../models/Member');
 
-// get list of all team members
+// get list of all team members with optional stack query
 exports.getTeamMembers = async (req, res, next) => {
   try {
-    Member.find({}, 'role avatar email name', (err, team) => {
-      if (err) {
-        next(err);
-      }
-      res.status(200).json(team);
-    });
+    const { stack } = req.query;
+    if (stack) {
+      Member.find({ stack }, 'role avatar email name', (err, team) => {
+        if (err) {
+          next(err);
+        }
+        if (team.length === 0) {
+          return res.status(404).json({
+            success: false,
+            message: 'not found',
+          });
+        }
+        res.status(200).json(team);
+      });
+    } else {
+      Member.find({}, 'role avatar team email name', (err, team) => {
+        if (err) {
+          next(err);
+        }
+        res.status(200).json(team);
+      });
+    }
   } catch (error) {
     next(error);
   }
@@ -23,7 +39,7 @@ exports.getTeamMember = async (req, res, next) => {
     const {
       id,
     } = req.params;
-    const member = await Member.findById(id, 'role avatar email name');
+    const member = await Member.findById(id, 'role avatar email team name');
     if (!member) {
       return res.status(404).json({
         success: false,
@@ -64,15 +80,13 @@ exports.updateTeamMember = async (req, res, next) => {
       id,
     } = req.params;
     const { body } = req;
-    Member.findByIdAndUpdate(id, body, (err, member) => {
+    Member.findByIdAndUpdate(id, body, (err) => {
       if (err) {
         next(err);
       }
       res.status(200).json({
         success: true,
         message: 'updated successfully',
-        id: member._id,
-        member,
       });
     });
   } catch (error) {

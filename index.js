@@ -15,9 +15,11 @@ mongoose.set('useCreateIndex', true);
 mongoose.connect(config.MONGODB_URL, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
+  useFindAndModify: false,
 })
   .then(() => {
     console.log('Connected to mongodb');
+    // start server after database is connected
     app.listen(config.PORT, () => {
       console.log(`connected to backend - ${config.PORT}`);
     });

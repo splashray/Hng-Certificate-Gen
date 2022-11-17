@@ -19,6 +19,11 @@ const memberSchema = new Schema({
     type: String,
     default: '',
   },
+  team: {
+    required: true,
+    type: String,
+    enum: ['backend', 'frontend', 'marketing', 'design', 'product manager'],
+  },
 }, {
   timestamps: true,
 });
