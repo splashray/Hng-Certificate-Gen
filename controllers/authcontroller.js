@@ -14,7 +14,7 @@ const userSignup  = async (req, res, next)=>{
 
 
         const email = req.body.email;
-        const subscription = (req.body.subscription) ? req.body.subscription : false;
+        const subscribed = (req.body.subscribed) ? req.body.subscribed : false;
         const isAdmin = (req.body.isAdmin) ? req.body.isAdmin : false;
         const password = req.body.password; 
         const user = await User.findOne({ email: email })
@@ -33,7 +33,7 @@ const userSignup  = async (req, res, next)=>{
                 email: email,
                 password: hash,
                 isAdmin: isAdmin,
-                subscription: subscription
+                subscribed: subscribed
             })
             await newUser.save()
              res.status(200).json({message: "New User has been created."})
