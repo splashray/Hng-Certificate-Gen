@@ -6,4 +6,4 @@ const config = {
     MONGODB_URL: process.env.MONGODB_URL || 'mongodb://0.0.0.0/certawi',
 
 }
-module.exports = config
+module.exports = config;
