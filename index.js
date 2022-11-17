@@ -1,58 +1,49 @@
+require('dotenv').config()
+require('express-async-errors')
+
 const express = require('express')
 const mongoose = require('mongoose')
 const bodyParser = require('body-Parser')
+const cookieParser = require('cookie-parser')
+const morgan = require('morgan')
 const cors = require('cors')
 const app = express()
 const config = require('./utils/config')
 const auth = require('./routes/authRouter')
 const users = require('./routes/userRouter')
 const profile = require('./routes/profileRouter')
+const connectDB = require('./database/db')
 const notFound = require('./middlewares/not-found')
-
-
-mongoose.set('useCreateIndex', true)
-mongoose.connect(config.MONGODB_URL, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-})
-.then(()=>{
-  console.log('Connected to mongodb.');
-})
-.catch((error)=>{
-  console.log(error.reason);
-})
-
+const errorHandler = require('./middlewares/errorHandler')
 
 //middleware
-app.use(cors());
+app.use(morgan('dev'))
+app.use(cors())
 app.use(express.json())
+app.use(cookieParser())
 app.use(bodyParser.json())
 
 app.get('/', (req, res) => {
-    res.send('Welcome to HNG-Certificate Api')
-});
+  res.send('Welcome to HNG-Certificate Api')
+})
 
 //routes
-app.use('/api/auth',auth)
-app.use('/api/users',users)
-app.use('/api/profile',profile)
+app.use('/api/auth', auth)
+app.use('/api/users', users)
+app.use('/api/profile', profile)
 
-
-
-app.use((err, req, res, next)=>{
-    const errorStatus = err.status || 500
-    const errorMessage = err.message || "Something went wrong!"
-    return res.status(errorStatus).json({
-      success: false,
-      status: errorStatus,
-      message: errorMessage,
-      stack: err.stack,
-    })
-  })
-  
 app.use(notFound)
+app.use(errorHandler)
 
+const port = process.env.PORT || 3000
 
-app.listen(config.PORT , ()=>{
-    console.log(`connected to backend - ${config.PORT}`);
-});
+const start = async () => {
+  try {
+    await connectDB(process.env.MONGO_URI)
+    app.listen(port, () => console.log(`Connected to port ${port}`))
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+start()
