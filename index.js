@@ -27,7 +27,7 @@ mongoose.connect(config.MONGODB_URL, {
 app.use(cors());
 app.use(express.json())
 app.use(bodyParser.json())
-
+app.use(express.json())
 app.get('/', (req, res) => {
     res.send('Welcome to HNG-Certificate Api')
 });
@@ -53,6 +53,14 @@ app.use((err, req, res, next)=>{
 app.use(notFound)
 
 
-app.listen(config.PORT , ()=>{
+// app.listen(config.PORT , ()=>{
+//     console.log(`connected to backend - ${config.PORT}`);
+// });
+
+mongoose.connect(config.MONGODB_URL).then(result => {
+  app.listen(config.PORT , ()=>{
     console.log(`connected to backend - ${config.PORT}`);
 });
+}).catch(err => {
+  console.log(err)
+})
