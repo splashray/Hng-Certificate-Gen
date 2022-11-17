@@ -16,6 +16,7 @@ mongoose.set('useCreateIndex', true)
 mongoose.connect(config.MONGODB_URL, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
+  useFindAndModify: false
 })
 .then(()=>{
   console.log('Connected to mongodb.');
