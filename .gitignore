@@ -3,3 +3,6 @@
 .eslintrc.json
 .vscode/
 member.rest
+index.js
+/node_modules
+config.env
