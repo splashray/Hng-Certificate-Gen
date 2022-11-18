@@ -46,11 +46,11 @@ const sendContact =  async (req, res) => {
       service: 'gmail',
       auth: {
         type: 'OAuth2',
-        user: process.env.MAIL_USERNAME,
-        pass: process.env.MAIL_PASSWORD,
-        clientId: process.env.OAUTH_CLIENTID,
-        clientSecret: process.env.OAUTH_CLIENT_SECRET,
-        refreshToken: process.env.OAUTH_REFRESH_TOKEN
+        user: AUTH_EMAIL,
+        pass: AUTH_PASS,
+        clientId: GOOGLE_CLIENT_ID,
+        clientSecret: GOOGLE_CLIENT_SECRET
+        // refreshToken: GOOGLE_REFRESH_TOKEN
       }
     });
 
