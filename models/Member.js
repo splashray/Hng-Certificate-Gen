@@ -34,5 +34,3 @@ const memberSchema = new Schema(
 const Member = model("Member", memberSchema);
 
 module.exports = Member;
-
-

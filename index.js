@@ -11,12 +11,13 @@ const teamRoute = require("./routes/teamRouter");
 const dotenv = require("dotenv");
 dotenv.config({ path: "./config.env" });
 const app = express();
+const router = require("./routes/teamRouter");
 
 const DB = process.env.DATABASE;
 mongoose.set("useCreateIndex", true);
 
 mongoose
-  .connect(DB, {
+  .connect(process.env.DATABASE_LOCAL, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useFindAndModify: false,
@@ -68,7 +69,7 @@ app.use((err, req, res, next) => {
 });
 
 app.use(notFound);
-
-// app.listen(config.PORT, () => {
-//   console.log(`connected to backend - ${config.PORT}`);
-// });
+const PORT = process.env.PORT;
+app.listen(PORT, () => {
+  console.log(`connected to backend`);
+});
