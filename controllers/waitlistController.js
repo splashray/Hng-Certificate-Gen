@@ -1,7 +1,7 @@
 const Waitlist = require('../models/waitlistModel');
-const dotenv = require('dotenv');
-dotenv.config();
-const nodemailer = require('nodemailer');
+const createError = require('../utils/error');
+
+const { sendMailingEmail } = require("../utils/email");
 
 // get all contacts
 const getWaitlist = async (req,res) => {
@@ -25,42 +25,15 @@ const sendEmail =  async (req, res) => {
       email
     });
 
-    newEmail.save();
-
-    const mail = `
-    <p>Thanks for subscribing to our emailing list.</p>
-    <p>You will be informed once we have new features.</p>
-  `
-    // Create Transporter
-    let transporter = nodemailer.createTransport({
-      service: 'gmail',
-      auth: {
-        type: 'OAuth2',
-        user: AUTH_EMAIL,
-        pass: AUTH_PASS,
-        clientId: GOOGLE_CLIENT_ID,
-        clientSecret: GOOGLE_CLIENT_SECRET,
-        refreshToken: GOOGLE_REFRESH_TOKEN
-      }
-    });
-
-    // Mail Options To Website Owner
-    let mailOptions = {
-      from: 'omosiyobo@gmail.com', //Sender address
-      to: `${req.body.email}`, // Receiver address
-      subject: 'Nodemailer Project',
-      text: 'Hi from your nodemailer project',
-      html: mail
-    };
-
-    transporter.sendMail(mailOptions, function(err, data) {
-      if (err) {
-        console.log("Error: " + err);
-      } else {
-        console.log("Email sent successfully");
-        console.log(data);
-      }
-    });
+    newEmail.save()
+      .then(result=>{
+        // handle account verification
+          sendMailingEmail(result, res)
+      }).catch(err =>{
+          console.log(err);
+          res.json({status:"FAILED", message:"An error occurred while saving mailing details"})
+      })
+    
 
     res.status(201).json({
       message: "Message sent",
