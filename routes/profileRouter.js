@@ -1,6 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const Profile = require('../models/userProfile');
+const Certificate = require('../models/certificateModel');
 
 
 
@@ -63,5 +64,16 @@ router.get("/:id", async (req, res) => {
     res.send("profile deleted");
   });
 
+  router.delete('/certificate/:id', async (req, res) => {
+    const cert = await Certificate.findByIdAndRemove(req.params.id);
+  
+    if (!cert) return res.status(400).json({
+      message: 'Unable to delete certificate/certificate not found'
+    });
+  
+    res.json({
+      message: 'Certificate deleted'
+    });
+  });
 
 module.exports = router
