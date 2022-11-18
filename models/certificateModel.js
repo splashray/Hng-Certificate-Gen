@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+const { Schema } = require('mongoose');
 
 const CertificateSchema = new mongoose.Schema({
   records: [{
