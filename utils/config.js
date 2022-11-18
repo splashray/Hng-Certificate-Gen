@@ -3,6 +3,7 @@ dotenv.config()
 
 const config = {
     PORT : process.env.PORT || 5000,
+    SECRET_KEY : process.env.SECRET_KEY,
     MONGODB_URL: process.env.MONGODB_URL,
     AUTH_EMAIL: process.env.AUTH_EMAIL,
     AUTH_PASS: process.env.AUTH_PASS,

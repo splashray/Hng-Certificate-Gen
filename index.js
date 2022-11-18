@@ -10,8 +10,9 @@ const careers = require('./routes/careerRouter')
 const mailingLists = require('./routes/mailingListRouter')
 const profile = require('./routes/profileRouter')
 const notFound = require('./middlewares/not-found')
+const payment = require('./routes/paymentRouter')
 
-
+process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = 0;
 mongoose.set('useCreateIndex', true)
 mongoose.connect(config.MONGODB_URL, {
   useNewUrlParser: true,
@@ -36,9 +37,9 @@ app.get('/', (req, res) => {
 //routes
 app.use('/api/auth',auth)
 app.use('/api/users',users)
-app.use('/api/careers',careers)
+ app.use('/api/careers',careers)
 app.use('/api/mailinglists',mailingLists)
-
+app.use('api/payment', payment)
 app.use('/api/profile',profile)
 
 
