@@ -3,20 +3,20 @@ const mongoose = require('mongoose')
 const UserSchema = new mongoose.Schema({
   name: {
     type: String,
-    required: true,
+    required: [true, 'Please provide name'],
   },
-  email:{
-    type:String,
-    required:true,
-    unique: true
+  email: {
+    type: String,
+    required: [true, 'Please provide email'],
+    unique: true,
   },
-  password:{
-    type:String,
-    required:true,
+  password: {
+    type: String,
+    required: [true, 'Please provide password'],
   },
-  isAdmin:{
+  isAdmin: {
     type: Boolean,
-    default: false
+    default: false,
   },
   avatar: {
     type: String,
@@ -24,12 +24,12 @@ const UserSchema = new mongoose.Schema({
   subscribed: {
     type: Boolean,
     required: true,
-    default: false
+    default: false,
   },
   trialAvailable: {
     type: Boolean,
     required: true,
-    default: true
+    default: true,
   },
 })
 
