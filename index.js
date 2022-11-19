@@ -1,61 +1,87 @@
 /* eslint-disable linebreak-style */
+const {
+  v4: uuid
+} = require('uuid')
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+require('dotenv').config()
+const userModel = require('./models/userModel')
 
 const app = express();
-const config = require('./utils/config');
-const auth = require('./routes/authRouter');
-const users = require('./routes/userRouter');
-const profile = require('./routes/profileRouter');
-const formUpload = require('./routes/formUploadRouter');
+const download = require('./routes/downloadRouter')
 const notFound = require('./middlewares/not-found');
 
 mongoose.set('useCreateIndex', true);
-mongoose.connect(config.MONGODB_URL, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-})
-<<<<<<< HEAD
+mongoose.connect(process.env.MONGODB_URL, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
   .then(() => {
     console.log('Connected to mongodb.');
+    app.listen(3000, () => {
+      console.log(`connected to backend `);
+    })
   })
   .catch((error) => {
     console.log(error.reason);
-  });
-=======
-.then(()=>{
-  console.log('Connected to mongodb.');
-})
-.catch((error)=>{
-  console.log(error.reason);
-})
-
-// const passport = require("passport");
-// require("./passportConfig")(passport);
->>>>>>> 979016fa2c51fd6765e1ad93e444ac58297d1837
-
+  })
+  
 // middleware
 app.use(cors());
-<<<<<<< HEAD
-app.use(express.json());
-app.use(bodyParser.json());
-
-=======
 app.use(express.json())
 app.use(bodyParser.json())
 app.use(express.json())
->>>>>>> 979016fa2c51fd6765e1ad93e444ac58297d1837
-app.get('/', (req, res) => {
-  res.send('Welcome to HNG-Certificate Api');
+
+app.get('/', (req, res, next) => {
+  try {
+    userModel.find({}, '-password -__v', (err, users) => {
+      if (err) return res.send('error')
+      res.json(users)
+    })
+  } catch (error) {
+    next(error)
+  }
 });
 
+// HOW TO SAVE A SINGLE CERTIFICATE DETAILS TO AN EXISTING USER DATABASE 
+
+// app.post('/upload', async (req, res, next) => {
+//   try {
+//     const {
+//       id,
+//       name,
+//       studentID
+//     } = req.body
+
+//     const collectionID = uuid()
+
+//     const user = await userModel.findById(id)
+
+//     if(!user) return res.send('user not found')
+
+//     // adds certificate record to users data, you can carryout multiple pushes before calling .save()
+//     user.records.push({name,
+//       studentID,
+//     collectionID})
+
+//     user.save((err, data) => {
+//       if(err) return res.send(err)
+//       res.send({
+//         message : "stored to database successfully",
+//         id: user._id,
+//         collectionID
+//       })
+//     })
+//   } catch (error) {
+//     next(error)
+//   }
+// })
+
 // routes
-app.use('/api/auth', auth);
-app.use('/api/users', users);
-app.use('/api/profile', profile);
-app.use('/api/form-upload', formUpload);
+app.use('/download', download)
+
 
 app.use((err, req, res, next) => {
   const errorStatus = err.status || 500;
@@ -69,21 +95,3 @@ app.use((err, req, res, next) => {
 });
 
 app.use(notFound);
-
-<<<<<<< HEAD
-app.listen(config.PORT, () => {
-  console.log(`connected to backend - ${config.PORT}`);
-});
-=======
-// app.listen(config.PORT , ()=>{
-//     console.log(`connected to backend - ${config.PORT}`);
-// });
-
-mongoose.connect(config.MONGODB_URL).then(result => {
-  app.listen(config.PORT , ()=>{
-    console.log(`connected to backend - ${config.PORT}`);
-});
-}).catch(err => {
-  console.log(err)
-})
->>>>>>> 979016fa2c51fd6765e1ad93e444ac58297d1837

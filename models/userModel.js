@@ -28,14 +28,23 @@ const UserSchema = new mongoose.Schema({
   },
   subscription: {
     type: String,
-    enum: ['basic', 'standard', 'premium']
+    enum: ['basic', 'standard', 'premium'],
+    default : 'basic'
   },
-  trialAvailable: {
-    type: Boolean,
-    required: true,
-    default: true
-  },
-
+  records: [{
+    name: {
+        type: String,
+        required: [true, 'Name of recipient is required']
+    },
+    studentID : {
+      type: String,
+      required:  [true, 'Student ID of recipient is required']
+    },
+    collectionID : {
+      required : true,
+      type : String
+    }
+  }],
 })
 
 module.exports = mongoose.model('User', UserSchema)

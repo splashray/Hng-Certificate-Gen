@@ -17,18 +17,13 @@
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "express-validator": "^6.14.2",
-<<<<<<< HEAD
-    "mongoose": "^5.13.15",
-    "nodemailer": "^6.8.0",
-    "uuid": "^9.0.0"
-=======
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.13.15",
     "nodemailer": "^6.8.0",
     "passport": "^0.6.0",
     "passport-google-oauth2": "^0.2.0",
-    "passport-google-oauth20": "^2.0.0"
->>>>>>> 979016fa2c51fd6765e1ad93e444ac58297d1837
+    "passport-google-oauth20": "^2.0.0",
+    "uuid": "^9.0.0"
   },
   "devDependencies": {
     "nodemon": "^2.0.7"
