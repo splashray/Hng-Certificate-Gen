@@ -5,6 +5,7 @@ const cors = require('cors')
 const app = express()
 const config = require('./utils/config')
 const notFound = require('./middlewares/not-found')
+const auth = require('./routes/authRouter')
 
 mongoose.set('useCreateIndex', true)
 mongoose.connect(config.MONGODB_URL, {
@@ -30,6 +31,9 @@ app.get('/', (req, res) => {
 });
 
 //routes
+app.use('/api/auth', auth)
+
+
 
 app.use((err, req, res, next)=>{
     const errorStatus = err.status || 500
