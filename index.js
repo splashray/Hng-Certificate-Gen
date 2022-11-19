@@ -17,18 +17,36 @@ mongoose.connect(config.MONGODB_URL, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 })
+<<<<<<< HEAD
   .then(() => {
     console.log('Connected to mongodb.');
   })
   .catch((error) => {
     console.log(error.reason);
   });
+=======
+.then(()=>{
+  console.log('Connected to mongodb.');
+})
+.catch((error)=>{
+  console.log(error.reason);
+})
+
+// const passport = require("passport");
+// require("./passportConfig")(passport);
+>>>>>>> 979016fa2c51fd6765e1ad93e444ac58297d1837
 
 // middleware
 app.use(cors());
+<<<<<<< HEAD
 app.use(express.json());
 app.use(bodyParser.json());
 
+=======
+app.use(express.json())
+app.use(bodyParser.json())
+app.use(express.json())
+>>>>>>> 979016fa2c51fd6765e1ad93e444ac58297d1837
 app.get('/', (req, res) => {
   res.send('Welcome to HNG-Certificate Api');
 });
@@ -52,6 +70,20 @@ app.use((err, req, res, next) => {
 
 app.use(notFound);
 
+<<<<<<< HEAD
 app.listen(config.PORT, () => {
   console.log(`connected to backend - ${config.PORT}`);
 });
+=======
+// app.listen(config.PORT , ()=>{
+//     console.log(`connected to backend - ${config.PORT}`);
+// });
+
+mongoose.connect(config.MONGODB_URL).then(result => {
+  app.listen(config.PORT , ()=>{
+    console.log(`connected to backend - ${config.PORT}`);
+});
+}).catch(err => {
+  console.log(err)
+})
+>>>>>>> 979016fa2c51fd6765e1ad93e444ac58297d1837
