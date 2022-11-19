@@ -13,6 +13,7 @@ const csvUpload = require('./routes/csvUploadRouter')
 const notFound = require('./middlewares/not-found')
 const filesPayloadExists = require('./middlewares/filePayLoadExist')
 const fileExtLimiter = require('./middlewares/fileExtLimiter')
+const certificates = require('./routes/certificateRouter')
 
 
 mongoose.set('useCreateIndex', true)
@@ -47,6 +48,7 @@ app.use('/api/mailinglists',mailingLists)
 app.use('/api/profile',profile)
 
 app.use('/api/upload/csv', fileExtLimiter, filesPayloadExists, csvUpload)
+app.use('/api/certificates', certificates)
 
 
 app.use((err, req, res, next)=>{
