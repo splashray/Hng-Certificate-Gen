@@ -73,20 +73,20 @@ const sendContact =  async (req, res) => {
   //     }
   //   });
 
-  //   const mail2 = `
-  //   <p>Your message has been received.</p>
-  // `
-  //   // Create Transporter
-  //   let transporter2 = nodemailer.createTransport({
-  //     service: 'gmail',
-  //     auth: {
-  //       user: config.AUTH_EMAIL,
-  //       pass: config.AUTH_PASS
-  //       // clientId: GOOGLE_CLIENT_ID,
-  //       // clientSecret: GOOGLE_CLIENT_SECRET
-  //       // refreshToken: GOOGLE_REFRESH_TOKEN
-  //     }
-  //   });
+    const mail2 = `
+    <p>Your message has been received.</p>
+  `
+    // Create Transporter
+    let transporter2 = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: config.AUTH_EMAIL,
+        pass: config.AUTH_PASS
+        // clientId: GOOGLE_CLIENT_ID,
+        // clientSecret: GOOGLE_CLIENT_SECRET
+        // refreshToken: GOOGLE_REFRESH_TOKEN
+      }
+    });
 
     // Mail Options To Website User
     let mailOptions2 = {
