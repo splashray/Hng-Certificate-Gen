@@ -58,7 +58,7 @@ const sendContact =  async (req, res) => {
     let mailOptions = {
       from: 'omosiyobo@gmail.com', //Sender address
       to: `${req.body.email}`, // Receiver address
-      subject: 'Nodemailer Project',
+      subject: 'Hi From Certawi',
       text: 'Hi from Certawi',
       html: mail
     };
