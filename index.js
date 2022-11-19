@@ -28,6 +28,7 @@ app.use(cors());
 app.use(express.json())
 app.use(bodyParser.json())
 
+
 app.get('/', (req, res) => {
     res.send('Welcome to HNG-Certificate Api')
 });

@@ -1,6 +1,7 @@
 const Contact = require('../models/contactModel');
 const dotenv = require('dotenv');
 dotenv.config();
+const config = require('../utils/config')
 const nodemailer = require('nodemailer');
 
 // get all contacts
@@ -20,50 +21,83 @@ const getContacts = async (req,res) => {
 // 
 const sendContact =  async (req, res) => {
   try{
-    const {firstName, lastName, email, phoneNumber} = await req.body;
+    const {firstName, lastName, email, phoneNumber, message} = await req.body;
     const newContact = new Contact({
       firstName,
       lastName,
       email,
-      phoneNumber
+      phoneNumber,
+      message
     });
 
     newContact.save();
 
-    const mail = `
-    <p>You have a new contact request</p>
-    <h3>Contact Details</h3>
-    <ul>  
-      <li>Name: ${req.body.name}</li>
-      <li>Email: ${req.body.email}</li>
-      <li>Phone: ${req.body.phone}</li>
-    </ul>
-    <h3>Message</h3>
-    <p>${req.body.message}</p>
-  `
-    // Create Transporter
-    let transporter = nodemailer.createTransport({
-      service: 'gmail',
-      auth: {
-        type: 'OAuth2',
-        user: AUTH_EMAIL,
-        pass: AUTH_PASS,
-        clientId: GOOGLE_CLIENT_ID,
-        clientSecret: GOOGLE_CLIENT_SECRET
-        // refreshToken: GOOGLE_REFRESH_TOKEN
-      }
-    });
+  //   const mail1 = `
+  //   <p>You have a new contact request</p>
+  //   <h3>Contact Details</h3>
+  //   <ul>  
+  //     <li>Name: ${req.body.firstName} ${req.body.lastName}</li>
+  //     <li>Email: ${req.body.email}</li>
+  //     <li>Phone: ${req.body.phoneNumber}</li>
+  //   </ul>
+  //   <h3>Message</h3>
+  //   <p>${req.body.message}</p>
+  // `
+  //   // Create Transporter
+  //   let transporter1 = nodemailer.createTransport({
+  //     service: 'gmail',
+  //     auth: {
+  //       user: config.AUTH_EMAIL,
+  //       pass: config.AUTH_PASS,
+  //       // clientId: GOOGLE_CLIENT_ID,
+  //       // clientSecret: GOOGLE_CLIENT_SECRET
+  //       // refreshToken: GOOGLE_REFRESH_TOKEN
+  //     }
+  //   });
 
-    // Mail Options To Website Owner
-    let mailOptions = {
+  //   // Mail Options To Website Owner
+  //   let mailOptions1 = {
+  //     from: 'omosiyobo@gmail.com', //Sender address
+  //     to: 'omosiyobo@gmail.com', // Receiver address
+  //     subject: 'Hi From Certawi',
+  //     text: 'Hi from Certawi',
+  //     html: mail1
+  //   };
+
+  //   transporter1.sendMail(mailOptions1, function(err, data) {
+  //     if (err) {
+  //       console.log("Error: " + err);
+  //     } else {
+  //       console.log("Email sent successfully");
+  //       console.log(data);
+  //     }
+  //   });
+
+  //   const mail2 = `
+  //   <p>Your message has been received.</p>
+  // `
+  //   // Create Transporter
+  //   let transporter2 = nodemailer.createTransport({
+  //     service: 'gmail',
+  //     auth: {
+  //       user: config.AUTH_EMAIL,
+  //       pass: config.AUTH_PASS
+  //       // clientId: GOOGLE_CLIENT_ID,
+  //       // clientSecret: GOOGLE_CLIENT_SECRET
+  //       // refreshToken: GOOGLE_REFRESH_TOKEN
+  //     }
+  //   });
+
+    // Mail Options To Website User
+    let mailOptions2 = {
       from: 'omosiyobo@gmail.com', //Sender address
       to: `${req.body.email}`, // Receiver address
       subject: 'Hi From Certawi',
       text: 'Hi from Certawi',
-      html: mail
+      html: mail2
     };
 
-    transporter.sendMail(mailOptions, function(err, data) {
+    transporter2.sendMail(mailOptions2, function(err, data) {
       if (err) {
         console.log("Error: " + err);
       } else {
