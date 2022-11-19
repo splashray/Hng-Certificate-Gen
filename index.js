@@ -6,6 +6,9 @@ const app = express()
 const config = require('./utils/config')
 const auth = require('./routes/authRouter')
 const users = require('./routes/userRouter')
+const careers = require('./routes/careerRouter')
+const mailingLists = require('./routes/mailingListRouter')
+const profile = require('./routes/profileRouter')
 const notFound = require('./middlewares/not-found')
 
 
@@ -21,7 +24,6 @@ mongoose.connect(config.MONGODB_URL, {
   console.log(error.reason);
 })
 
-
 //middleware
 app.use(cors());
 app.use(express.json())
@@ -34,6 +36,11 @@ app.get('/', (req, res) => {
 //routes
 app.use('/api/auth',auth)
 app.use('/api/users',users)
+app.use('/api/careers',careers)
+app.use('/api/mailinglists',mailingLists)
+
+app.use('/api/profile',profile)
+
 
 
 app.use((err, req, res, next)=>{
