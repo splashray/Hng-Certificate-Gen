@@ -2,11 +2,12 @@ const express = require('express')
 const router = express.Router()
 
 const { updateUserName, updateAvatar } = require('../controllers/userController')
+const { updatePassword } = require('../controllers/userController')
 
-//get a users details
+//update user details users details
 router.put('/:id', updateUserName, updateAvatar);
 
-//get all users
-// router.get("/", )
+//update users password
+router.put("/password/update", updatePassword)
 
-module.exports = router;
+module.exports = router

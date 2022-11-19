@@ -8,6 +8,7 @@ const secret = crypto.randomBytes(20).toString("hex");
 exports.userSignup  = async (req, res, next)=>{
     try {
         const errors = validationResult(req);
+
         if (!errors.isEmpty()) {
             const error = new Error("validation failed");
             error.statusCode = 422;
@@ -17,8 +18,6 @@ exports.userSignup  = async (req, res, next)=>{
 
         const name = req.body.name;
         const email = req.body.email;
-        const subscribed = (req.body.subscribed) ? req.body.subscribed : false;
-        const isAdmin = (req.body.isAdmin) ? req.body.isAdmin : false;
         const password = req.body.password; 
         const user = await User.findOne({ email: email })
         if (user) {
@@ -35,8 +34,6 @@ exports.userSignup  = async (req, res, next)=>{
                 name: name,
                 email: email,
                 password: hash,
-                isAdmin: isAdmin,
-                subscribed: subscribed
             })
             const createdUser = await newUser.save()
              res.status(200).json({message: "New User has been created.", id: createdUser._id, email: createdUser.email})
