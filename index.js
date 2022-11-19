@@ -39,7 +39,6 @@ app.use('/api/careers',careers)
 app.use('/api/mailinglists',mailingLists)
 
 
-
 app.use((err, req, res, next)=>{
     const errorStatus = err.status || 500
     const errorMessage = err.message || "Something went wrong!"
