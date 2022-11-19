@@ -1,13 +1,9 @@
 const express = require('express')
 const mongoose = require('mongoose')
-const bodyParser = require('body-Parser')
+const bodyParser = require('body-parser')
 const cors = require('cors')
 const app = express()
 const config = require('./utils/config')
-const auth = require('./routes/authRouter')
-const users = require('./routes/userRouter')
-const careers = require('./routes/careerRouter')
-const mailingLists = require('./routes/mailingListRouter')
 const notFound = require('./middlewares/not-found')
 
 
@@ -27,17 +23,14 @@ mongoose.connect(config.MONGODB_URL, {
 app.use(cors());
 app.use(express.json())
 app.use(bodyParser.json())
+app.use(express.json())
+app.use(express.urlencoded({extended: false}));
 
 app.get('/', (req, res) => {
     res.send('Welcome to HNG-Certificate Api')
 });
 
 //routes
-app.use('/api/auth',auth)
-app.use('/api/users',users)
-app.use('/api/careers',careers)
-app.use('/api/mailinglists',mailingLists)
-
 
 app.use((err, req, res, next)=>{
     const errorStatus = err.status || 500
@@ -54,6 +47,14 @@ app.use((err, req, res, next)=>{
 app.use(notFound)
 
 
-app.listen(config.PORT , ()=>{
+// app.listen(config.PORT , ()=>{
+//     console.log(`connected to backend - ${config.PORT}`);
+// });
+
+mongoose.connect(config.MONGODB_URL).then(result => {
+  app.listen(config.PORT , ()=>{
     console.log(`connected to backend - ${config.PORT}`);
 });
+}).catch(err => {
+  console.log(err)
+})
