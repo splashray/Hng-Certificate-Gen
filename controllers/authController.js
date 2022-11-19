@@ -10,7 +10,7 @@ const userSignup = async (req, res, next) => {
 
     if (!errors.isEmpty()) {
       const error = new Error('validation failed')
-      error.statusCode = 422
+      error.status = 422
       error.data = errors.array()
       throw error
     }
@@ -53,13 +53,13 @@ const forgotPassword = async (req, res) => {
   const { email } = req.body
   const user = await User.findOne({ email })
   if (!user) {
-    return res.status(400).json('User does not exist')
+    return res.status(400).json({ message: 'User does not exist' })
   }
   const token = jwt.sign({ email: user.email }, config.JWT_SECRET, {
     expiresIn: config.JWT_LIFETIME,
   })
   if (!token) {
-    return res.status(401).json('token cannot be verified')
+    return res.status(401).json({ message: 'token cannot be verified' })
   }
   res.status(200).json({ newpasswordToken: token })
 }
@@ -67,17 +67,22 @@ const forgotPassword = async (req, res) => {
 const changePassword = async (req, res) => {
   try {
     const { token } = req.params
-    const { newpassword, confirmpassword } = req.body
+    if (!token) {
+      return res.status(400).json({ message: 'token is required' })
+    }
+    const { newpassword, confirmpassword } = req?.body
     if (newpassword != confirmpassword) {
-      return res.status(400).json('both passwords are not the same')
+      return res
+        .status(400)
+        .json({ message: 'both passwords are not the same' })
     }
     const { email } = jwt.verify(token, config.JWT_SECRET)
     const user = await User.findOne({ email })
     user.password = newpassword
     user.save()
-    res.status(200).send('password changed')
+    res.status(200).send({ message: 'password changed' })
   } catch (err) {
-    return res.status(401).json('invalid Token')
+    return res.status(401).json({ message: 'invalid Token' })
   }
 }
 
