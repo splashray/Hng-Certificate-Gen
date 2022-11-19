@@ -1,3 +1,4 @@
+require("express-async-errors")
 const express = require('express')
 const mongoose = require('mongoose')
 const bodyParser = require('body-Parser')
@@ -8,6 +9,7 @@ const auth = require('./routes/authRouter')
 const users = require('./routes/userRouter')
 const careers = require('./routes/careerRouter')
 const mailingLists = require('./routes/mailingListRouter')
+const pricing = require('./routes/pricingRouter')
 const notFound = require('./middlewares/not-found')
 
 
@@ -37,6 +39,7 @@ app.use('/api/auth',auth)
 app.use('/api/users',users)
 app.use('/api/careers',careers)
 app.use('/api/mailinglists',mailingLists)
+app.use('/api/pricing', pricing)
 
 
 
