@@ -1,4 +1,4 @@
-//const User = require('../models/userModel')
+const User = require('../models/userModel')
 const _ = require('lodash');
 const axios = require('axios').default;
 const bodyParser = require('body-parser');
@@ -46,11 +46,11 @@ const callback  = async (req,res) => {
 
         const data = _.at(response.data,['reference', 'amount', 'customer.email', ])
         [reference, amount, email ] = data;
-        // const filter = {email:email}
-        // const update = { subscribed:true }
-        // const user = await User.findOneAndUpdate(filter,update,{new:true} )
-        const user = Users.find(user=>user.email === email)
-        user.subscribed = true
+        const filter = {email:email}
+        const update = { subscribed:true }
+        const user = await User.findOneAndUpdate(filter,update,{new:true} )
+        // const user = Users.find(user=>user.email === email)
+        // user.subscribed = true
         console.log(user)
         if(!user){
             return res.status(404).send(err)
