@@ -10,28 +10,41 @@ const client = new OAuth2Client(config.GOOGLE_CLIENT_ID);
 
 //function to verify user google access token
 async function verify(_token) {
-    const ticket = await client.verifyIdToken({
-        idToken: _token,
-        audience: config.GOOGLE_CLIENT_ID,
-    });
-    return ticket.getPayload();
-  }
+    try {  
+        const ticket = await client.verifyIdToken({
+            idToken: _token,
+            audience: config.GOOGLE_CLIENT_ID,
+        });
+        return ticket.getPayload();
+    } catch (error) {
+        throw error
+    }
+}
+
+//function to check if user already exists
+const userExist = async (_email) => {
+    const user = await User.findOne({ email: _email })
+    if (user) {
+        return true
+    }
+    return false
+}
 
 
-const userSignup  = async (req, res, next)=>{
+const userSignup = async (req, res, next) => {
     try {
+        let { accessToken, email, password, name } = req.body;
+
         //google signup
         if (req.body.accessToken) {
-            const { accessToken } = require(req.body);
             const payload = await verify(accessToken)
             const googleUserId = payload["sub"];
-            const email = payload["email"];
-            const name = payload["name"];
+            email = payload["email"];
+            name = payload["name"];
 
             //check db if user already exists
-            const user = await User.findOne({ email: email })
-            if (user) {
-                return res.status(401).json({message: "A user already exist with this email!"})
+            if (await userExist(email)) {
+                return res.status(401).json({ message: "email already in use" })
             }
 
             //if not create new user
@@ -45,7 +58,7 @@ const userSignup  = async (req, res, next)=>{
                 }
             })
             const createdUser = await newUser.save()
-            res.status(201).json({message: "New User has been created.", id: createdUser._id, email: createdUser.email})
+            return res.status(201).json({message: "New User has been created.", id: createdUser._id, email: createdUser.email})
         }
 
         //Form signup
@@ -54,21 +67,15 @@ const userSignup  = async (req, res, next)=>{
             const error = new Error("validation failed");
             error.statusCode = 422;
             error.data = errors.array()
-            console.log(error.data)
             throw error;
         }
 
-        const name = req.body.name;
-        const email = req.body.email;
-        const password = req.body.password; 
-        const user = await User.findOne({ email: email })
-        if (user) {
-            return res.status(401).json({message: "A user already exist with this email!"})
+        if (await userExist(email)) {
+            return res.status(401).json({ message: "email already in use" })
         }
 
         bcrypt.hash(password, 10, async function (err, hash) {
             if (err) {
-                console.log(err)
                 const error = new Error("account could not be created");
                 error.statusCode = 422;
                 throw error;
@@ -83,7 +90,7 @@ const userSignup  = async (req, res, next)=>{
                 }
             })
             const createdUser = await newUser.save()
-             res.status(201).json({message: "New User has been created.", id: createdUser._id, email: createdUser.email})
+            res.status(201).json({message: "New User has been created.", id: createdUser._id, email: createdUser.email})
         });
     } catch (err) {
         next(err)
