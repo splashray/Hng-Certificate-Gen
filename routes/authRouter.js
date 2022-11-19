@@ -7,6 +7,8 @@ const {
   changePassword,
 } = require('../controllers/authController')
 
+const authentication = require('../middlewares/authentication')
+
 router.post(
   '/signup',
   [
@@ -20,6 +22,6 @@ router.post(
   ],
   userSignup,
 )
-router.post('/forgotPassword', forgotPassword)
-router.post('/confirmPassword/:token', changePassword)
+router.route('/forgotPassword').post(authentication, forgotPassword)
+router.route('/confirmPassword/:token').post(authentication, changePassword)
 module.exports = router
