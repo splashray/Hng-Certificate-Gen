@@ -33,14 +33,13 @@ const userExist = async (_email) => {
 
 const userSignup = async (req, res, next) => {
     try {
-        let { accessToken, email, password, name } = req.body;
+        let { accessToken, email, password } = req.body;
 
         //google signup
         if (req.body.accessToken) {
             const payload = await verify(accessToken)
             const googleUserId = payload["sub"];
             email = payload["email"];
-            name = payload["name"];
 
             //check db if user already exists
             if (await userExist(email)) {
@@ -50,7 +49,6 @@ const userSignup = async (req, res, next) => {
             //if not create new user
             const newUser = new User({
                 email: email,
-                name: name,
                 authenticationType: {
                     google: {
                         uuid: googleUserId
@@ -81,7 +79,6 @@ const userSignup = async (req, res, next) => {
                 throw error;
             }
             const newUser = new User({
-                name: name,
                 email: email,
                 authenticationType: {
                     form: {
