@@ -39,8 +39,6 @@ app.use('/api/users',users)
 app.use('/api/careers',careers)
 app.use('/api/mailinglists',mailingLists)
 
-app.use('/api/profile',profile)
-
 
 
 app.use((err, req, res, next)=>{
