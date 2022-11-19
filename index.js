@@ -6,28 +6,28 @@ const app = express()
 const config = require('./utils/config')
 const notFound = require('./middlewares/not-found')
 
-
-mongoose.set('useCreateIndex', true)
-mongoose.connect(config.MONGODB_URL, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-})
-.then(()=>{
-  console.log('Connected to mongodb.');
-})
-.catch((error)=>{
-  console.log(error.reason);
-})
+mongoose.set("useCreateIndex", true);
+mongoose
+  .connect(config.MONGODB_URL, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  .then(() => {
+    console.log("Connected to mongodb.");
+  })
+  .catch((error) => {
+    console.log(error.reason);
+  });
 
 //middleware
 app.use(cors());
-app.use(express.json())
-app.use(bodyParser.json())
-app.use(express.json())
-app.use(express.urlencoded({extended: false}));
+app.use(express.json());
+app.use(bodyParser.json());
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
 
-app.get('/', (req, res) => {
-    res.send('Welcome to HNG-Certificate Api')
+app.get("/", (req, res) => {
+  res.send("Welcome to HNG-Certificate Api");
 });
 
 //routes
@@ -43,18 +43,19 @@ app.use((err, req, res, next)=>{
     })
   })
   
-  
-app.use(notFound)
-
+app.use(notFound);
 
 // app.listen(config.PORT , ()=>{
 //     console.log(`connected to backend - ${config.PORT}`);
 // });
 
-mongoose.connect(config.MONGODB_URL).then(result => {
-  app.listen(config.PORT , ()=>{
-    console.log(`connected to backend - ${config.PORT}`);
-});
-}).catch(err => {
-  console.log(err)
-})
+mongoose
+  .connect(config.MONGODB_URL)
+  .then((result) => {
+    app.listen(config.PORT, () => {
+      console.log(`connected to backend - ${config.PORT}`);
+    });
+  })
+  .catch((err) => {
+    console.log(err);
+  });
