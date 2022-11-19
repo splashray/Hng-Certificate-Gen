@@ -8,7 +8,6 @@ const auth = require('./routes/authRouter')
 const users = require('./routes/userRouter')
 const careers = require('./routes/careerRouter')
 const mailingLists = require('./routes/mailingListRouter')
-const profile = require('./routes/profileRouter')
 const notFound = require('./middlewares/not-found')
 
 
