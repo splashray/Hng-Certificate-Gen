@@ -4,8 +4,6 @@ const bodyParser = require('body-parser')
 const cors = require('cors')
 const app = express()
 const config = require('./utils/config')
-const notFound = require('./middlewares/not-found')
-
 
 mongoose.set('useCreateIndex', true)
 mongoose.connect(config.MONGODB_URL, {
@@ -31,6 +29,7 @@ app.get('/', (req, res) => {
 });
 
 //routes
+app.use('/api/upload/csv', csvRouter);
 
 app.use((err, req, res, next)=>{
     const errorStatus = err.status || 500
