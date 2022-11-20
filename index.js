@@ -5,6 +5,7 @@ const cors = require('cors')
 const app = express()
 const config = require('./utils/config')
 const notFound = require('./middlewares/not-found')
+const certificate = require('./routes/certificateRoute')
 
 mongoose.set('useCreateIndex', true)
 mongoose.connect(config.MONGODB_URL, {
@@ -31,6 +32,8 @@ app.get('/', (req, res) => {
 
 //routes
 
+app.use('/api/certificate', certificate)
+
 app.use((err, req, res, next)=>{
     const errorStatus = err.status || 500
     const errorMessage = err.message || "Something went wrong!"
@@ -41,6 +44,7 @@ app.use((err, req, res, next)=>{
       stack: err.stack,
     })
   })
+
   
   
 app.use(notFound)
