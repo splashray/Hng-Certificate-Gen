@@ -5,6 +5,8 @@ const cors = require('cors')
 const app = express()
 const config = require('./utils/config')
 const notFound = require('./middlewares/not-found')
+const blog = require('./routes/blogPostRouter')
+
 
 mongoose.set('useCreateIndex', true)
 mongoose.connect(config.MONGODB_URL, {
