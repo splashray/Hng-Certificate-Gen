@@ -1,22 +1,17 @@
-/* eslint-disable linebreak-style */
-const {
-  v4: uuid
-} = require('uuid')
-const express = require('express');
-const mongoose = require('mongoose');
-const bodyParser = require('body-parser');
-const cors = require('cors');
-require('dotenv').config()
-const userModel = require('./models/userModel')
 
+const express = require('express')
+const mongoose = require('mongoose')
+const bodyParser = require('body-parser')
+const cors = require('cors')
+const config = require('./utils/config')
 const app = express();
 const download = require('./routes/downloadRouter')
-const notFound = require('./middlewares/not-found');
+const userModel = require('./models/userModel')
 
 mongoose.set('useCreateIndex', true);
 mongoose.connect(process.env.MONGODB_URL, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
   })
   .then(() => {
     console.log('Connected to mongodb.');
@@ -27,12 +22,13 @@ mongoose.connect(process.env.MONGODB_URL, {
   .catch((error) => {
     console.log(error.reason);
   })
+
   
-// middleware
-app.use(cors());
-app.use(express.json())
-app.use(bodyParser.json())
-app.use(express.json())
+  // middleware
+  app.use(cors());
+  app.use(express.json())
+  app.use(bodyParser.json())
+  app.use(express.urlencoded({extended: false}));
 
 app.get('/', (req, res, next) => {
   try {
@@ -59,9 +55,10 @@ app.get('/', (req, res, next) => {
 
 //     const user = await userModel.findById(id)
 
+
 //     if(!user) return res.send('user not found')
 
-//     // adds certificate record to users data, you can carryout multiple pushes before calling .save()
+//     // ADDS CERTIFICATE RECORD TO USER DATA, YOU CAN CARRYOUT MULTIPLE PUSHES BEFORE CALLING .save()
 //     user.records.push({name,
 //       studentID,
 //     collectionID})
@@ -79,9 +76,8 @@ app.get('/', (req, res, next) => {
 //   }
 // })
 
-// routes
+//routes
 app.use('/download', download)
-
 
 app.use((err, req, res, next) => {
   const errorStatus = err.status || 500;
@@ -93,5 +89,3 @@ app.use((err, req, res, next) => {
     stack: err.stack,
   });
 });
-
-app.use(notFound);

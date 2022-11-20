@@ -1,7 +1,7 @@
 const userModel = require('../models/userModel')
 
 // @desc    downloads certifcate records from User.records array
-// @route   GET /api/download
+// @route   POST /api/download
 // @access  Private
 
 exports.getUserData = async (req, res, next) => {
