@@ -22,6 +22,6 @@ router.post(
   ],
   userSignup,
 )
-router.route('/forgotPassword').post(authentication, forgotPassword)
-router.route('/confirmPassword/:token').post(authentication, changePassword)
+router.route('/forgotPassword').post(forgotPassword)
+router.route('/confirmPassword/:token').post(changePassword)
 module.exports = router

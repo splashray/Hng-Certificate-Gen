@@ -70,7 +70,7 @@ const changePassword = async (req, res) => {
     if (!token) {
       return res.status(400).json({ message: 'token is required' })
     }
-    const { newpassword, confirmpassword } = req?.body
+    const { newpassword, confirmpassword } = req.body
     if (newpassword != confirmpassword) {
       return res
         .status(400)
