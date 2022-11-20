@@ -4,7 +4,9 @@ const bodyParser = require('body-parser')
 const cors = require('cors')
 const app = express()
 const config = require('./utils/config')
+const profile = require('./routes/profileRouter')
 const notFound = require('./middlewares/not-found')
+
 
 
 mongoose.set('useCreateIndex', true)
@@ -31,9 +33,10 @@ app.get('/', (req, res) => {
 });
 
 //routes
+app.use('/api/profile',profile)
 
 app.use((err, req, res, next)=>{
-    const errorStatus = err.status || 500
+    const errorStatus = err.status || 6000
     const errorMessage = err.message || "Something went wrong!"
     return res.status(errorStatus).json({
       success: false,
