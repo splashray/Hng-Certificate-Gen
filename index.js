@@ -4,6 +4,7 @@ const bodyParser = require('body-parser')
 const cors = require('cors')
 const app = express()
 const config = require('./utils/config')
+const contacts = require('./routes/contactRouter')
 const notFound = require('./middlewares/not-found')
 
 mongoose.set('useCreateIndex', true)
@@ -30,6 +31,7 @@ app.get('/', (req, res) => {
 });
 
 //routes
+app.use('/api/contactus',contacts)
 
 app.use((err, req, res, next)=>{
     const errorStatus = err.status || 500
