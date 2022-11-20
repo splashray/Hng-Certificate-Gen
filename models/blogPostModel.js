@@ -22,6 +22,10 @@ const blogPostSchema = new mongoose.Schema({
   datePosted: {
     type: Date,
     required: true,
+  },
+  imageUrl: {
+    type: String,
+    
   }
 
 })

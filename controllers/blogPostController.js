@@ -1,8 +1,9 @@
 const blogPostModel = require('../models/blogPostModel')
 
+
 exports.addBlogPost = async (req, res) => {
     try {
-        const { title, article, writtenBy, datePosted } = req.body;
+        const { title, article, writtenBy, datePosted, filePath } = req.body;
         const blogPost = await blogPostModel.addBlogPost(title, article, writtenBy, datePosted);
         return res.status(200).json({
             success: true,
@@ -23,7 +24,7 @@ exports.getAllBlogPosts = async (req, res) => {
             blogPosts
         )
     } catch (error) {
-        return res.status(500).json({ success: false, error: error })
+        return res.status(500).json({ success: false, error: error.message })
     }
 }
 
