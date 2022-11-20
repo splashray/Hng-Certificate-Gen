@@ -5,6 +5,7 @@ const cors = require('cors')
 const app = express()
 const config = require('./utils/config')
 const notFound = require('./middlewares/not-found')
+const blog = require('./routes/blogPostRouter')
 
 
 mongoose.set('useCreateIndex', true)
@@ -12,6 +13,7 @@ mongoose.connect(config.MONGODB_URL, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 })
+
 .then(()=>{
   console.log('Connected to mongodb.');
 })
@@ -23,14 +25,14 @@ mongoose.connect(config.MONGODB_URL, {
 app.use(cors());
 app.use(express.json())
 app.use(bodyParser.json())
-app.use(express.json())
 app.use(express.urlencoded({extended: false}));
 
 app.get('/', (req, res) => {
-    res.send('Welcome to HNG-Certificate Api')
+  res.send('Welcome to HNG-Certificate Api')
 });
 
 //routes
+app.use('/api/blog', blog)
 
 app.use((err, req, res, next)=>{
     const errorStatus = err.status || 500
