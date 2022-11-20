@@ -5,6 +5,7 @@ const cors = require('cors')
 const app = express()
 const config = require('./utils/config')
 const notFound = require('./middlewares/not-found')
+const pricing = require('./routes/pricingRouter')
 
 mongoose.set('useCreateIndex', true)
 mongoose.connect(config.MONGODB_URL, {
@@ -30,6 +31,7 @@ app.get('/', (req, res) => {
 });
 
 //routes
+app.use('/api/pricing', pricing)
 
 app.use((err, req, res, next)=>{
     const errorStatus = err.status || 500
@@ -46,14 +48,14 @@ app.use((err, req, res, next)=>{
 app.use(notFound)
 
 
-// app.listen(config.PORT , ()=>{
-//     console.log(`connected to backend - ${config.PORT}`);
-// });
+ app.listen(config.PORT , ()=>{
+     console.log(`connected to backend - ${config.PORT}`);
+ });
 
-mongoose.connect(config.MONGODB_URL).then(result => {
+/*mongoose.connect(config.MONGODB_URL).then(result => {
   app.listen(config.PORT , ()=>{
     console.log(`connected to backend - ${config.PORT}`);
 });
 }).catch(err => {
   console.log(err)
-})
+}) */
