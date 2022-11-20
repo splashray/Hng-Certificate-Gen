@@ -14,6 +14,7 @@ const notFound = require('./middlewares/not-found')
 const filesPayloadExists = require('./middlewares/filePayLoadExist')
 const fileExtLimiter = require('./middlewares/fileExtLimiter')
 const certificates = require('./routes/certificateRouter')
+const fileUpload = require("express-fileupload")
 
 
 mongoose.set('useCreateIndex', true)
@@ -33,6 +34,7 @@ app.use(cors());
 app.use(express.json())
 app.use(bodyParser.json())
 app.use(express.json())
+app.use(fileUpload())
 app.use(express.urlencoded({extended: false}));
 
 app.get('/', (req, res) => {

@@ -29,11 +29,11 @@ const createCertificate = async(req, res, next) =>{
 
           certificate.save();
 
-          res.status(201).json({result: jsonOutput, message:`Certificate record created successfully`}).end();
+          return res.status(201).json({result: certificate, message:`Certificate record created successfully`}).end();
 
         }
       
-        res.status(400).json({message: "No csv file was uploaded"}).end();
+        return res.status(400).json({message: "No csv file was uploaded"}).end();
       
         
     } catch (err) {
