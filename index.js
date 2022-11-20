@@ -13,19 +13,19 @@ mongoose.connect(config.MONGODB_URL, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 })
-  .then(() => {
-    console.log('Connected to mongodb.');
-  })
-  .catch((error) => {
-    console.log(error.reason);
-  })
+
+.then(()=>{
+  console.log('Connected to mongodb.');
+})
+.catch((error)=>{
+  console.log(error.reason);
+})
 
 //middleware
 app.use(cors());
 app.use(express.json())
 app.use(bodyParser.json())
-app.use(express.json())
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({extended: false}));
 
 app.get('/', (req, res) => {
   res.send('Welcome to HNG-Certificate Api')
@@ -34,19 +34,18 @@ app.get('/', (req, res) => {
 //routes
 app.use('/api/blog', blog)
 
-
-app.use((err, req, res, next) => {
-  const errorStatus = err.status || 500
-  const errorMessage = err.message || "Something went wrong!"
-  return res.status(errorStatus).json({
-    success: false,
-    status: errorStatus,
-    message: errorMessage,
-    stack: err.stack,
+app.use((err, req, res, next)=>{
+    const errorStatus = err.status || 500
+    const errorMessage = err.message || "Something went wrong!"
+    return res.status(errorStatus).json({
+      success: false,
+      status: errorStatus,
+      message: errorMessage,
+      stack: err.stack,
+    })
   })
-})
-
-
+  
+  
 app.use(notFound)
 
 
@@ -55,9 +54,9 @@ app.use(notFound)
 // });
 
 mongoose.connect(config.MONGODB_URL).then(result => {
-  app.listen(config.PORT, () => {
+  app.listen(config.PORT , ()=>{
     console.log(`connected to backend - ${config.PORT}`);
-  });
+});
 }).catch(err => {
   console.log(err)
 })
