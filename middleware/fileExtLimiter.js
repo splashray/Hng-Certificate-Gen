@@ -6,9 +6,9 @@ const fileExtLimiter = (req, res, next) => {
   if (!allowed) {
     const message = `Upload failed. Only .csv files allowed`;
 
-    return res.status(422).json({ status: "error", message });
+    return res.status(422).json({ status: 'error', message });
   }
-  
+  console.log(req.file);
   next();
 };
 

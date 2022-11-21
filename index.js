@@ -3,21 +3,17 @@ const express = require('express')
 const mongoose = require('mongoose')
 const bodyParser = require('body-parser')
 const cors = require('cors')
-const fileUpload = require('express-fileupload');
 const app = express()
-
-//import coustom middlware
-const connectDB = require('./utils/dbConn');
-
-//import custom routes
-const csvRouter = require('./routes/csvRouter.js');
-const authRouter = require('./routes/authRouter');
-
-const PORT = process.env.PORT || 5000;
-
-connectDB();
-
-
+const config = require('./utils/config')
+const auth = require('./routes/authRouter')
+const users = require('./routes/userRouter')
+const careers = require('./routes/careerRouter')
+const mailingLists = require('./routes/mailingListRouter')
+const profile = require('./routes/profileRouter')
+const csvUpload = require('./routes/csvUploadRouter')
+const notFound = require('./middlewares/not-found')
+const filesPayloadExists = require('./middlewares/filePayLoadExist')
+const fileExtLimiter = require('./middlewares/fileExtLimiter')
 
 
 
@@ -27,7 +23,6 @@ app.use(express.json())
 app.use(bodyParser.json());
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
-app.use(fileUpload());
 
 app.get('/', (req, res) => {
     res.send('Welcome to HNG-Certificate Api');
