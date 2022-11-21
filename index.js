@@ -11,6 +11,7 @@ const connectDB = require('./utils/dbConn');
 
 //import custom routes
 const csvRouter = require('./routes/csvRouter.js');
+const authRouter = require('./routes/authRouter');
 
 const PORT = process.env.PORT || 5000;
 
@@ -46,6 +47,7 @@ app.get('/', (req, res) => {
 //   })
   
   app.use('/api/upload/csv', csvRouter);
+  app.use('/api/auth', authRouter);
   
 
 

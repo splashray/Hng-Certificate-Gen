@@ -13,7 +13,15 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  isAdmin: {
+  authenticationType: {
+    form: {
+      password: String
+    },
+    google: {
+      uuid: String
+    }
+  },
+  isAdmin:{
     type: Boolean,
     default: false
   },
