@@ -1,6 +1,3 @@
-const dotenv = require ('dotenv')
-dotenv.config()
-
 const config = {
     PORT : process.env.PORT || 5000,
     MONGODB_URL: process.env.MONGODB_URL,
@@ -10,4 +7,4 @@ const config = {
     GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET
 
 }
-module.exports = config
+module.exports = config;
