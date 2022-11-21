@@ -1,6 +1,5 @@
-// This function is used to validate the data gotten from uploaded csv file
 const isValidJsonOutput = (data) => {
-    const headers = ["name", "organization", "award", "description", "date", "certificate_number"];
+    const headers = ["name", "student_id"];
 
     // Check to see if every row has complete set of values
     const validResponse = data.every(jsonObj => {

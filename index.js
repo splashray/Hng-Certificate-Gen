@@ -1,88 +1,82 @@
-const express = require('express');
-const mongoose = require('mongoose');
-const bodyParser = require('body-parser');
-const cors = require('cors');
-const multer = require('multer');
-const os = require('os');
-const app = express();
-const config = require('./utils/config');
-const auth = require('./routes/authRouter');
-const users = require('./routes/userRouter');
-const careers = require('./routes/careerRouter');
-const mailingLists = require('./routes/mailingListRouter');
-const profile = require('./routes/profileRouter');
-const csvUpload = require('./routes/csvUploadRouter');
-const notFound = require('./middlewares/not-found');
-const filesPayloadExists = require('./middlewares/filePayLoadExist');
-const fileExtLimiter = require('./middlewares/fileExtLimiter');
+require('dotenv').config();
+const express = require('express')
+const mongoose = require('mongoose')
+const bodyParser = require('body-parser')
+const cors = require('cors')
+const fileUpload = require('express-fileupload');
+const app = express()
 
-mongoose.set('useCreateIndex', true);
-mongoose
-  .connect(config.MONGODB_URL, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
-  .then(() => {
-    console.log('Connected to mongodb.');
-  })
-  .catch((error) => {
-    console.log(error.reason);
-  });
+//import coustom middlware
+const connectDB = require('./utils/dbConn');
+
+//import custom routes
+const csvRouter = require('./routes/csvRouter.js');
+const authRouter = require('./routes/authRouter');
+
+const PORT = process.env.PORT || 5000;
+
+connectDB();
+
+
+
+
+mongoose.set('useCreateIndex', true)
+mongoose.connect(config.MONGODB_URL, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+})
+.then(()=>{
+  console.log('Connected to mongodb.');
+})
+.catch((error)=>{
+  console.log(error.reason);
+})
 
 //middleware
 app.use(cors());
-app.use(express.json());
-app.use(bodyParser.json());
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.json())
+app.use(bodyParser.json())
+app.use(express.json())
+app.use(express.urlencoded({extended: false}));
+app.use(fileUpload())
 
 app.get('/', (req, res) => {
-  res.send('Welcome to HNG-Certificate Api');
+    res.send('Welcome to HNG-Certificate Api')
 });
 
 //routes
-app.use('/api/auth', auth);
-app.use('/api/users', users);
-app.use('/api/careers', careers);
-app.use('/api/mailinglists', mailingLists);
+app.use('/api/auth',auth)
+app.use('/api/users',users)
+app.use('/api/careers',careers)
+app.use('/api/mailinglists',mailingLists)
 
-app.use('/api/profile', profile);
+app.use('/api/profile',profile)
 
-//upload csv
-const upload = multer({ dest: os.tmpdir() });
+app.use('/api/upload/csv', fileExtLimiter, filesPayloadExists, csvUpload)
 
-app.use(
-  '/api/upload/csv',
-  upload.single('file'),
-  fileExtLimiter,
-  filesPayloadExists,
-  csvUpload
-);
 
-app.use((err, req, res, next) => {
-  const errorStatus = err.status || 500;
-  const errorMessage = err.message || 'Something went wrong!';
-  return res.status(errorStatus).json({
-    success: false,
-    status: errorStatus,
-    message: errorMessage,
-    stack: err.stack,
-  });
-});
+app.use((err, req, res, next)=>{
+    const errorStatus = err.status || 500
+    const errorMessage = err.message || "Something went wrong!"
+    return res.status(errorStatus).json({
+      success: false,
+      status: errorStatus,
+      message: errorMessage,
+      stack: err.stack,
+    })
+  })
+  
+app.use(notFound)
 
-app.use(notFound);
 
 // app.listen(config.PORT , ()=>{
 //     console.log(`connected to backend - ${config.PORT}`);
 // });
 
-mongoose
-  .connect(config.MONGODB_URL)
-  .then((result) => {
-    app.listen(config.PORT, () => {
-      console.log(`connected to backend - ${config.PORT}`);
-    });
-  })
-  .catch((err) => {
-    console.log(err);
-  });
+mongoose.connect(config.MONGODB_URL).then(result => {
+  app.listen(config.PORT , ()=>{
+    console.log(`connected to backend - ${config.PORT}`);
+});
+}).catch(err => {
+  console.log(err)
+})

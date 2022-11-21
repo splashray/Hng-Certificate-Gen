@@ -1,11 +1,66 @@
 const User = require('../models/userModel')
 const bcrypt = require('bcryptjs')
-const {validationResult} = require("express-validator")
+const { validationResult } = require("express-validator")
+const config = require("../utils/config")
 
-const userSignup  = async (req, res, next)=>{
+
+const { OAuth2Client } = require('google-auth-library');
+const client = new OAuth2Client(config.GOOGLE_CLIENT_ID);
+
+
+//function to verify user google access token
+async function verify(_token) {
+    try {  
+        const ticket = await client.verifyIdToken({
+            idToken: _token,
+            audience: config.GOOGLE_CLIENT_ID,
+        });
+        return ticket.getPayload();
+    } catch (error) {
+        throw error
+    }
+}
+
+//function to check if user already exists
+const userExist = async (_email) => {
+    const user = await User.findOne({ email: _email })
+    if (user) {
+        return true
+    }
+    return false
+}
+
+
+const userSignup = async (req, res, next) => {
     try {
-        const errors = validationResult(req);
+        let { accessToken, email, password } = req.body;
 
+        //google signup
+        if (req.body.accessToken) {
+            const payload = await verify(accessToken)
+            const googleUserId = payload["sub"];
+            email = payload["email"];
+
+            //check db if user already exists
+            if (await userExist(email)) {
+                return res.status(401).json({ message: "email already in use" })
+            }
+
+            //if not create new user
+            const newUser = new User({
+                email: email,
+                authenticationType: {
+                    google: {
+                        uuid: googleUserId
+                    }
+                }
+            })
+            const createdUser = await newUser.save()
+            return res.status(201).json({message: "New User has been created.", id: createdUser._id, email: createdUser.email})
+        }
+
+        //Form signup
+        const errors = validationResult(req);
         if (!errors.isEmpty()) {
             const error = new Error("validation failed");
             error.statusCode = 422;
@@ -13,28 +68,26 @@ const userSignup  = async (req, res, next)=>{
             throw error;
         }
 
-        const name = req.body.name;
-        const email = req.body.email;
-        const password = req.body.password; 
-        const user = await User.findOne({ email: email })
-        if (user) {
-            return res.status(401).json({message: "A user already exist with this email!"})
+        if (await userExist(email)) {
+            return res.status(401).json({ message: "email already in use" })
         }
 
         bcrypt.hash(password, 10, async function (err, hash) {
             if (err) {
-                console.log(err)
                 const error = new Error("account could not be created");
                 error.statusCode = 422;
                 throw error;
             }
             const newUser = new User({
-                name: name,
                 email: email,
-                password: hash,
+                authenticationType: {
+                    form: {
+                        password: hash
+                    }
+                }
             })
             const createdUser = await newUser.save()
-             res.status(200).json({message: "New User has been created.", id: createdUser._id, email: createdUser.email})
+            res.status(201).json({message: "New User has been created.", id: createdUser._id, email: createdUser.email})
         });
     } catch (err) {
         next(err)
